@@ -16,6 +16,14 @@
     <artifactId>libwas</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <url>http://www.ff-esternberg.at</url>
+
+    <scm>
+        <connection>scm:git:git@github.com:itshorty/libwas</connection>
+        <url>https://github.com/itshorty/libwas</url>
+        <developerConnection>scm:git:git@github.com:itshorty/libwas</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
