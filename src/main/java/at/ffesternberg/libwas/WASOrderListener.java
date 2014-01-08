@@ -3,10 +3,9 @@
  */
 package at.ffesternberg.libwas;
 
-import java.util.List;
-
 import at.ffesternberg.libwas.entity.Order;
 
+import java.util.Set;
 
 /**
  * WASOrderListener
@@ -19,5 +18,5 @@ public interface WASOrderListener {
      *
      * @param orders the new list of orders
      */
-    public void updateOrders(List<Order> orders);
+    public void updateOrders(Set<Order> orders);
 }

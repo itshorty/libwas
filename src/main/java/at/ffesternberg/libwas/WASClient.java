@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,7 +39,7 @@ public class WASClient {
     }
 
     public WASClient(InetSocketAddress address) {
-        if (this.address == null) {
+        if (address == null) {
             throw new IllegalArgumentException("WAS Socket address was null!");
         }
         this.address = address;
@@ -99,7 +98,7 @@ public class WASClient {
         statusListeners.removeAll(toRemove);
     }
 
-    void fireOrderUpdate(List<Order> orders) {
+    void fireOrderUpdate(Set<Order> orders) {
         HashSet<WeakReference<WASOrderListener>> toRemove = new HashSet<WeakReference<WASOrderListener>>();
         for (WeakReference<WASOrderListener> reference : orderListeners) {
             WASOrderListener listener=reference.get();

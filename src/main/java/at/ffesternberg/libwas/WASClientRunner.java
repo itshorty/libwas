@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -22,13 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: huwa
- * Date: 06.01.14
- * Time: 14:32
- * To change this template use File | Settings | File Templates.
- */
+
 public class WASClientRunner implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(WASClientRunner.class);
     private static final int UPDATE_INTERVAL_MS = 5000;
@@ -67,12 +62,20 @@ public class WASClientRunner implements Runnable {
 
                         String response = readResponse();
 
-                        Collection<Order> orderCollection = parseResponse(response);
+                        Set<Order> orderCollection = parseResponse(response);
+                        wasClient.fireOrderUpdate(orderCollection);
                         if (!wasClient.isStop())
                             Thread.sleep(UPDATE_INTERVAL_MS);
                     } catch (InterruptedException ex) {
                         // Maybe we are terminated by WasClient, check in loop header
                     }
+                }
+            } catch (ConnectException conEx){
+                wasClient.setState(WASStatus.DISCONNECTED);
+                log.error("Can't connect to WAS! - Retry in 30sec",conEx);
+                try {
+                    Thread.sleep(30000);
+                } catch (InterruptedException e) {
                 }
             } catch (IOException e) {
                 log.error("IOException in WASClient!", e);
@@ -123,7 +126,7 @@ public class WASClientRunner implements Runnable {
     private Order parseOrder(Node node) {
         Order order = new Order();
 
-        order.setKey(Long.parseLong(getTextNodeValue(node, "key").substring(2), 12));
+        //order.setKey(Long.parseLong(getTextNodeValue(node, "key").substring(2), 12)); //TODO: Fix numberformat exception!
         order.setOrigin(getTextNodeValue(node, "origin"));
         order.setReceived(parseWasDate(getTextNodeValue(node, "receive-tad")));
         order.setOperationId(getTextNodeValue(node, "operation-id"));
@@ -164,7 +167,7 @@ public class WASClientRunner implements Runnable {
 
     private Date parseWasDate(String nodeValue) {
         try {
-            return nodeValue == null ? null : wasDateFormat.parse(nodeValue);
+            return nodeValue == null || nodeValue.isEmpty() ? null : wasDateFormat.parse(nodeValue);
         } catch (ParseException e) {
             throw new IllegalStateException("Can't parse " + nodeValue + " to WAS Date!", e);
         }
