@@ -12,7 +12,7 @@
     <description>A library to access the upper austrian fire brigade alert system</description>
     <groupId>at.ff-esternberg.was</groupId>
     <artifactId>libwas</artifactId>
-    <version>0.1-beta</version>
+    <version>0.2-SNAPSHOT</version>
 
     <url>http://www.ff-esternberg.at</url>
 
@@ -20,7 +20,7 @@
         <connection>scm:git:git@github.com:itshorty/libwas</connection>
         <url>https://github.com/itshorty/libwas</url>
         <developerConnection>scm:git:git@github.com:itshorty/libwas</developerConnection>
-        <tag>libwas-0.1-beta</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
