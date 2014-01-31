@@ -12,7 +12,7 @@
 
     <name>libwas</name>
     <description>A library to access the upper austrian fire brigade alert system</description>
-    <groupId>at.ff-esternberg.libwas</groupId>
+    <groupId>at.ff-esternberg.was</groupId>
     <artifactId>libwas</artifactId>
     <version>1.0-SNAPSHOT</version>
 
