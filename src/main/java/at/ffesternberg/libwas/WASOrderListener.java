@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * WASOrderListener
  *
- * @author Florian Huber <admin@ff-esternberg.at>
+ * @author Florian Huber (admin@ff-esternberg.at)
  */
 public interface WASOrderListener {
     /**

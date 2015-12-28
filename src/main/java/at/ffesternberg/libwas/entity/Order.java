@@ -18,6 +18,10 @@ public class Order {
     private String info;
     private OrderStatus status;
     private List<String> fireDepartments;
+    
+    
+    public Order() {
+	}
 
     public String getOrigin() {
         return origin;

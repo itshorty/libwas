@@ -4,6 +4,7 @@
 package at.ffesternberg.libwas;
 
 import at.ffesternberg.libwas.entity.Order;
+import at.ffesternberg.libwas.entity.WASResponse;
 import at.ffesternberg.libwas.exception.IllegalWasClientState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.util.Set;
 /**
  * WASClient
  *
- * @author Florian Huber <admin@ff-esternberg.at>
+ * @author Florian Huber (admin@ff-esternberg.at)
  */
 public class WASClient {
     private static Logger log = LoggerFactory.getLogger(WASClient.class);
@@ -26,6 +27,7 @@ public class WASClient {
     private Set<WeakReference<WASStatusListener>> statusListeners = new HashSet<WeakReference<WASStatusListener>>();
     private WASStatus state = WASStatus.STOPPED;
 
+    private WASClientRunner clientRunner = null;
     private Thread clientThread = null;
     private InetSocketAddress address;
     private boolean stop;
@@ -51,7 +53,8 @@ public class WASClient {
     public void start() throws IllegalWasClientState {
         if (state == WASStatus.STOPPED) {
             stop=false;
-            clientThread = new Thread(new WASClientRunner(address, this));
+            clientRunner = new WASClientRunner(address, this);
+            clientThread = new Thread(clientRunner);
             clientThread.setName("wasClientThread");
             clientThread.setDaemon(true);
             clientThread.start();
@@ -80,6 +83,13 @@ public class WASClient {
                 log.debug("New state: " + state);
             fireStateUpdate(oldState, state);
         }
+    }
+    
+    public WASResponse getLastRAWData(){
+    	if( clientRunner != null) {
+    		return clientRunner.getResponse();
+    	}
+    	throw new IllegalStateException();
     }
 
     boolean isStop(){

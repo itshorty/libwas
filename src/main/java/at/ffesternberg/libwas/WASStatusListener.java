@@ -7,7 +7,7 @@ package at.ffesternberg.libwas;
 /**
  * WASStatusListener
  *
- * @author Florian Huber <admin@ff-esternberg.at>
+ * @author Florian Huber (admin@ff-esternberg.at)
  */
 public interface WASStatusListener {
     /**

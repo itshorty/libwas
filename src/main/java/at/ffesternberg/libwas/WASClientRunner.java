@@ -2,6 +2,8 @@ package at.ffesternberg.libwas;
 
 import at.ffesternberg.libwas.entity.Order;
 import at.ffesternberg.libwas.entity.OrderStatus;
+import at.ffesternberg.libwas.entity.WASResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -35,8 +37,11 @@ public class WASClientRunner implements Runnable {
     private Socket sock = null;
     private Writer w = null;
     private BufferedReader r = null;
+    private WASResponse response;
 
-    public WASClientRunner(InetSocketAddress address, WASClient wasClient) {
+
+
+	public WASClientRunner(InetSocketAddress address, WASClient wasClient) {
         this.address = address;
         this.wasClient = wasClient;
 
@@ -60,9 +65,9 @@ public class WASClientRunner implements Runnable {
 
                         sendCommand();
 
-                        String response = readResponse();
+                        readResponse();
 
-                        Set<Order> orderCollection = parseResponse(response);
+                        Set<Order> orderCollection = parseResponse();
                         wasClient.fireOrderUpdate(orderCollection);
                         if (!wasClient.isStop())
                             Thread.sleep(UPDATE_INTERVAL_MS);
@@ -103,8 +108,13 @@ public class WASClientRunner implements Runnable {
 
     }
 
-    private Set<Order> parseResponse(String response) throws IOException {
-        Document doc = loadDoc(response);
+    /**
+     * Parses the RAW XML Data from the WASResponse Object
+     * @return a set of parsed orders
+     * @throws IOException
+     */
+    private Set<Order> parseResponse() throws IOException {
+        Document doc = loadDoc(response.getResponse());
 
         Set<Order> orderSet = new HashSet<Order>();
 
@@ -198,7 +208,11 @@ public class WASClientRunner implements Runnable {
         }
     }
 
-    private String readResponse() throws IOException {
+    /**
+     * Reads the raw data from the reader and saves it in a new WASResponse object
+     * @throws IOException
+     */
+    private void readResponse() throws IOException {
         String line;
         StringBuilder sb = new StringBuilder();
         // Read till termination mark is found
@@ -218,7 +232,7 @@ public class WASClientRunner implements Runnable {
         } else {
             throw new IOException("EOF before XML termination!\nAlready read:\n" + sb.toString());
         }
-        return sb.toString();
+        response=new WASResponse(sb.toString());
     }
 
     private void sendCommand() throws IOException {
@@ -252,5 +266,11 @@ public class WASClientRunner implements Runnable {
         r = null;
     }
 
+    public WASResponse getResponse() {
+		return response;
+	}
 
+	public void setResponse(WASResponse response) {
+		this.response = response;
+	}
 }
