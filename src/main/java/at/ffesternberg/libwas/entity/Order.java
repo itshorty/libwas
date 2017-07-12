@@ -1,5 +1,7 @@
 package at.ffesternberg.libwas.entity;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +25,24 @@ public class Order {
     public Order() {
 	}
 
+    public Order(Order old){
+    	this.key = old.key;
+    	this.origin = old.origin;
+    	this.received = old.received;
+    	this.watchout = old.watchout;
+    	this.finished = old.finished;
+    	this.operationId = old.operationId;
+    	this.alarmlevel = old.alarmlevel;
+    	this.name = old.name;
+    	this.location = old.location;
+    	this.operation = old.operation;
+    	this.caller = old.caller;
+    	this.info = old.info;
+    	this.status = old.status;
+    	this.fireDepartments = new ArrayList<String>(old.fireDepartments);
+    	
+    }
+    
     public String getOrigin() {
         return origin;
     }
