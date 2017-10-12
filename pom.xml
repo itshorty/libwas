@@ -24,6 +24,16 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<distributionManagement>
+		<repository>
+			<id>sonatype</id>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-dev</id>
+			<url>http://nexus.dev.local/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
