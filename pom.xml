@@ -28,10 +28,6 @@
 		<repository>
 			<id>sonatype</id>
 		</repository>
-		<snapshotRepository>
-			<id>nexus-dev</id>
-			<url>http://nexus.dev.local/repository/maven-snapshots/</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 	<licenses>
@@ -55,6 +51,24 @@
 			<email>huber.florian@ff-esternberg.at</email>
 		</developer>
 	</developers>
+
+	<profiles>
+		<profile>
+			<id>cibuild</id>
+			<activation>
+				<property>
+					<name>jenkins</name>
+					<value>yes</value>
+				</property>
+			</activation>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>nexus-dev</id>
+					<url>${jenkins.repo.snapshot}</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
