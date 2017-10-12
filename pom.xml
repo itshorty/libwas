@@ -52,24 +52,6 @@
 		</developer>
 	</developers>
 
-	<profiles>
-		<profile>
-			<id>cibuild</id>
-			<activation>
-				<property>
-					<name>jenkins</name>
-					<value>yes</value>
-				</property>
-			</activation>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>nexus-dev</id>
-					<url>${jenkins.repo.snapshot}</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-	</profiles>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.slf4j>1.7.1</version.slf4j>
@@ -171,6 +153,21 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>cibuild</id>
+			<activation>
+				<property>
+					<name>jenkins</name>
+					<value>yes</value>
+				</property>
+			</activation>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>nexus-dev</id>
+					<url>${jenkins.repo.snapshot}</url>
+				</snapshotRepository>
+			</distributionManagement>
 		</profile>
 	</profiles>
 	<dependencies>
